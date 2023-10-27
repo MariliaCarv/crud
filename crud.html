@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BRECHÓ BREPRÓ</title>
+    <link rel="stylesheet" >
+</head>
+<body>
+    <header>
+        <div class="logo-brepro">
+            <img src="brepro_logo.png" height="120px">
+        </div>
+    </header>
+
+    <main>
+        <form autocomplete="off" onsubmit="onFormSubmit(); return false;">
+            <div>
+                <label for="productCode">Codigo do Produto:</label>
+                <input type="text" name="productCode" id="productCode" placeholder="Codigo do Produto">
+            </div>
+
+            <div>
+                <label for="product">Produto:</label>
+                <input type="text" name="product" id="product" placeholder="Produto">
+            </div>
+
+            <div>
+                <label for="qty">Quantidade:</label>
+                <input type="text" name="qty" id="qty" placeholder="Quantidade">
+            </div>
+
+            <div>
+                <label for="price">Preço:</label>
+                <input type="text" name="price" id="price" placeholder="Preço">
+            </div>
+
+            <div class="form-button">
+                <input type="submit" value="Adicionar">
+            </div>
+        </form>
+
+        <aside>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Preço</th>
+                        <th>Acão</th>
+                    </tr>
+                </thead>
+                <tbody id="storeList"></tbody>
+            </table>
+        </aside>
+    </main>
+
+
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+header {
+    position: relative;
+    width: 100%;
+    top: 0;
+    background-color: #BDC0FF;
+    box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.15);
+    padding: 30px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+}
+
+header > .logo-brepro {
+    
+}
+
+.logo-brepro {
+    display: flex;
+    align-items: center;
+}
+
+main {
+    display: grid;
+}
+
+form {
+    display: flex;
+    flex-direction: row;
+    padding: 5%;
+    justify-content: center;
+}
+
+form input, form select {
+    padding: 5px;
+    border: 1px solid #B100CE;
+    border-radius: 10px;
+    margin: 10px;
+    color: #B100CE;
+}
+
+
+aside {
+    display: flex;
+    flex-direction: row;
+    padding: 5%;
+    justify-content: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #B100CE;
+    border-radius: 10px;
+    text-align: center;
+}
+
+tr:hover {
+    background-color: #BDC0FF;
+}
+</style>
+
+
+
+
+
+    <script>
+        let editRowIndex = null;
+
+        function onFormSubmit() {
+       
+              const productCode = document.getElementById("productCode").value;
+              const product = document.getElementById("product").value;
+            const qty = document.getElementById("qty").value;
+            const price = document.getElementById("price").value;
+
+            const storeList = document.getElementById("storeList");
+            const newRow = storeList.insertRow();
+
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+
+            cell1.innerHTML = productCode;
+            cell2.innerHTML = product;
+            cell3.innerHTML = qty;
+            cell4.innerHTML = price;
+            cell5.innerHTML = '<button onclick="editRow(this)">Editar</button> <button onclick="deleteRow(this)">Deletar</button>';
+            document.getElementById("productCode").value = '';
+            document.getElementById("product").value = '';
+            document.getElementById("qty").value = '';
+            document.getElementById("price").value = '';
+          
+        }
+        
+      
+
+
+
+
+
+        function deleteRow(row) {
+            const index = row.parentNode.parentNode.rowIndex;
+            document.getElementById("storeList").deleteRow(index);
+        }
+
+        function editRow(row) {
+            const cells = row.parentNode.parentNode.cells;
+            document.getElementById("productCode").value = cells[0].innerText;
+            document.getElementById("product").value = cells[1].innerText;
+            document.getElementById("qty").value = cells[2].innerText;
+            document.getElementById("price").value = cells[3].innerText;
+
+            editRowIndex = row.parentNode.parentNode.rowIndex;
+
+            const submitButton = document.querySelector('.form-button input[type="submit"]');
+            submitButton.value = "Update Edit";
+        }
+
+        function updateRow() {
+            if (editRowIndex !== null) {
+                const productCode = document.getElementById("productCode").value;
+                const product = document.getElementById("product").value;
+                const qty = document.getElementById("qty").value;
+                const price = document.getElementById("price").value;
+
+                const storeList = document.getElementById("storeList");
+                const row = storeList.rows[editRowIndex];
+
+                if (row) {
+                    row.cells[0].innerText = productCode;
+                    row.cells[1].innerText = product;
+                    row.cells[2].innerText = qty;
+                    row.cells[3].innerText = price;
+                }
+
+                const submitButton = document.querySelector('.form-button input[type="submit"]');
+                submitButton.value = "Add Product";
+
+                document.getElementById("productCode").value = '';
+                document.getElementById("product").value = '';
+                document.getElementById("qty").value = '';
+                document.getElementById("price").value = '';
+
+                editRowIndex = null;
+            }
+        }
+    </script>
+</body>
+</html>
